@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: simpleapp-nodeport-service3
+  labels:
+    app: simpleapp
+    version: 0.0.1
+spec:
+  selector:
+    app: simpleapp
+    version: 0.0.1
+  ports:
+  - name: "web"
+    port: 80 
+    protocol: TCP
+    targetPort: 8080
+    hostPort: 30000
+  - name: "http"
+    port: 8080
+    targetPort: 8080
+    hostPort: 8080
+    protocol: TCP
+  - name: "kamailio"
+    port: 5060
+    targetPort: 5060
+    hostPort: 5060
+    protocol: TCP
+  - port: 5060
+    protocol: UDP
+    targetPort: 5060
+    hostPort: 5060
+    name: "sipone"
+  - port: 5061
+    targetPort: 5061
+    hostPort: 5061
+    protocol: UDP
+    name: "siptwo"

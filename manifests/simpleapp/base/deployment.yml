@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: simpleapp
+  name: simpleapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simpleapp
+      version: 0.0.1
+  template:
+    metadata:
+      labels:
+        app: simpleapp
+        version: 0.0.1
+    spec:
+      containers:
+      - image: ghcr.io/jhoelzel/simpleapp:0.0.1
+        name: simpleapp
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+            hostPort: 8080
+          - name: tcp
+            containerPort: 5060
+            protocol: TCP
+            hostPort: 5060
+          - name: udp1
+            containerPort: 5060
+            hostPort: 5060
+            protocol: UDP
+          - name: udp2
+            containerPort: 5061
+            hostPort: 5061
+            protocol: UDP
+        resources:
+            requests:
+              cpu: "15m"
+              memory: "15Mi"
+            limits:
+              cpu: "50m"
+              memory: "50Mi"
+        livenessProbe:
+          httpGet:
+            path: /status/healthz
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /status/readyz
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 3
